@@ -1,6 +1,8 @@
 "use strict";
 const aTemplatesSelectors = [`#welcome`, `#game-artist`, `#game-genre`, `#result-success`, `#fail-time`, `#fail-tries`, `#modal-error`, `#modal-confirm`];
 const aTemplates = [];
+const iRightArrowKeycode = 39;
+const iLeftArrowKeycode = 37;
 aTemplatesSelectors.forEach(function (sSelector) {
   aTemplates.push(document.querySelector(sSelector));
 });
@@ -8,7 +10,7 @@ aTemplatesSelectors.forEach(function (sSelector) {
 const showTemplate = (iNumber) => {
   const eMainBlock = document.querySelector(`.main`);
   eMainBlock.innerHTML = ``;
-  eMainBlock.appendChild(aTemplates[iNumber]);
+  eMainBlock.appendChild(aTemplates[iNumber].content.cloneNode(true));
 };
 
 const addNavigationArrows = () => {
@@ -36,18 +38,18 @@ const addNavigationArrows = () => {
 const setKeyboardListener = () => {
   let iPageCounter = 0;
   document.addEventListener(`keyup`, function () {
-    if (event.keyCode === 39) {
-      iPageCounter = iPageCounter === aTemplatesSelectors.length - 1 ? aTemplatesSelectors.length - 1 : ++iPageCounter;
-    } else if (event.keyCode === 37) {
-      iPageCounter = iPageCounter === 0 ? 0 : --iPageCounter;
+    if (event.keyCode === iRightArrowKeycode) {
+      iPageCounter = Math.min(aTemplatesSelectors.length - 1, iPageCounter + 1);
+    } else if (event.keyCode === iLeftArrowKeycode) {
+      iPageCounter = Math.max(0, iPageCounter - 1);
     }
     showTemplate(iPageCounter);
   });
   document.addEventListener(`click`, function () {
     if (event.target === document.querySelectorAll(`.arrows__btn`)[1]) {
-      iPageCounter = iPageCounter === aTemplatesSelectors.length - 1 ? aTemplatesSelectors.length - 1 : ++iPageCounter;
+      iPageCounter = Math.min(aTemplatesSelectors.length - 1, iPageCounter + 1);
     } else if (event.target === document.querySelectorAll(`.arrows__btn`)[0]) {
-      iPageCounter = iPageCounter === 0 ? 0 : --iPageCounter;
+      iPageCounter = Math.max(0, iPageCounter - 1);
     }
     showTemplate(iPageCounter);
   });
