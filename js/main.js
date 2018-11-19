@@ -1,20 +1,20 @@
 "use strict";
-const aTemplatesSelectors = [`#welcome`, `#game-artist`, `#game-genre`, `#result-success`, `#fail-time`, `#fail-tries`, `#modal-error`, `#modal-confirm`];
-const aTemplates = [];
-const iRightArrowKeycode = 39;
-const iLeftArrowKeycode = 37;
-aTemplatesSelectors.forEach(function (sSelector) {
-  aTemplates.push(document.querySelector(sSelector));
+const templatesSelectors = [`#welcome`, `#game-artist`, `#game-genre`, `#result-success`, `#fail-time`, `#fail-tries`, `#modal-error`, `#modal-confirm`];
+const templates = [];
+const rightArrowKeycode = 39;
+const leftArrowKeycode = 37;
+templatesSelectors.forEach(function (selector) {
+  templates.push(document.querySelector(selector));
 });
 
-const showTemplate = (iNumber) => {
+const showTemplate = (number) => {
   const eMainBlock = document.querySelector(`.main`);
   eMainBlock.innerHTML = ``;
-  eMainBlock.appendChild(aTemplates[iNumber].content.cloneNode(true));
+  eMainBlock.appendChild(templates[number].content.cloneNode(true));
 };
 
 const addNavigationArrows = () => {
-  const sElemToPaste =
+  const elemToPaste =
         `<div class="arrows__wrap">
             <style>
               .arrows__wrap {
@@ -32,26 +32,26 @@ const addNavigationArrows = () => {
             <button class="arrows__btn"><-</button>
             <button class="arrows__btn">-></button>
         </div>`;
-  document.querySelector(`.app`).innerHTML += (sElemToPaste);
+  document.querySelector(`.app`).innerHTML += (elemToPaste);
 };
 
 const setKeyboardListener = () => {
-  let iPageCounter = 0;
+  let pageCounter = 0;
   document.addEventListener(`keyup`, function () {
-    if (event.keyCode === iRightArrowKeycode) {
-      iPageCounter = Math.min(aTemplatesSelectors.length - 1, iPageCounter + 1);
-    } else if (event.keyCode === iLeftArrowKeycode) {
-      iPageCounter = Math.max(0, iPageCounter - 1);
+    if (event.keyCode === rightArrowKeycode) {
+      pageCounter = Math.min(templatesSelectors.length - 1, pageCounter + 1);
+    } else if (event.keyCode === leftArrowKeycode) {
+      pageCounter = Math.max(0, pageCounter - 1);
     }
-    showTemplate(iPageCounter);
+    showTemplate(pageCounter);
   });
   document.addEventListener(`click`, function () {
     if (event.target === document.querySelectorAll(`.arrows__btn`)[1]) {
-      iPageCounter = Math.min(aTemplatesSelectors.length - 1, iPageCounter + 1);
+      pageCounter = Math.min(templatesSelectors.length - 1, pageCounter + 1);
     } else if (event.target === document.querySelectorAll(`.arrows__btn`)[0]) {
-      iPageCounter = Math.max(0, iPageCounter - 1);
+      pageCounter = Math.max(0, pageCounter - 1);
     }
-    showTemplate(iPageCounter);
+    showTemplate(pageCounter);
   });
 };
 
