@@ -1,9 +1,7 @@
 import throwDomEl from './domEmitter';
 import {showTemplate} from './showTempByNumber';
-import {addEvListener as addEvListenerGame} from './gameArtist';
+import {addEvListenerGameGenre, setChoiceCheckListener} from './gameGenre';
 
-showTemplate(1);
-addEvListenerGame();
 
 export const welcomeScreen = throwDomEl(`
   <section class="welcome">
@@ -20,8 +18,10 @@ export const welcomeScreen = throwDomEl(`
     <p class="welcome__text">Удачи!</p>
   </section>`);
 
-export const addEvListener = () => {
+export const addEvListenerWelcome = () => {
   document.querySelector(`.welcome__button`).addEventListener(`click`, function () {
-    showTemplate(2);
+    showTemplate(1);
+    setChoiceCheckListener();
+    addEvListenerGameGenre();
   });
 };

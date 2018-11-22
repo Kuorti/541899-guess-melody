@@ -1,4 +1,5 @@
 import {showTemplate} from './showTempByNumber';
-import {addEvListener} from './welcomeScreen';
+import {addEvListenerWelcome} from './welcomeScreen';
+
 showTemplate(0);
-addEvListener();
+addEvListenerWelcome();

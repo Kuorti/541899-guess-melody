@@ -1,4 +1,7 @@
 import throwDomEl from './domEmitter';
+import {showTemplate} from "./showTempByNumber";
+import {addEvListener as addEvListenerGameArtist} from "./gameArtist";
+import {addEvListenerWelcome} from "./welcomeScreen";
 export const gameGenre = throwDomEl(`
   <section class="game game--genre">
     <header class="game__header">
@@ -76,10 +79,37 @@ export const gameGenre = throwDomEl(`
     </section>
   </section>`);
 
-window.addEventListener(`click`, function () {
-  if (event.target.classList.contains(`game__check`) && !event.target.classList.contains(`mySelected`)) {
-    event.target.classList.add(`mySelected`);
-  } else if (event.target.classList.contains(`game__check`) && event.target.classList.contains(`mySelected`)) {
-    event.target.classList.remove(`mySelected`);
+export const setChoiceCheckListener = () => {
+  const submitButton = document.querySelector(`.game__submit`);
+  const gameCheckElementsList = document.querySelectorAll(`.game__check`);
+  submitButton.setAttribute(`disabled`, ``);
+
+  for (let i = 0; i < gameCheckElementsList.length; i++) {
+    gameCheckElementsList[i].addEventListener(`click`, function (event) {
+      if (event.target.classList.contains(`mySelected`)) {
+        event.target.classList.remove(`mySelected`);
+      } else {
+        event.target.classList.add(`mySelected`);
+      }
+
+      if (document.querySelector(`.mySelected`) !== null) {
+        submitButton.removeAttribute(`disabled`);
+      } else {
+        submitButton.setAttribute(`disabled`, ``);
+      }
+    });
   }
-});
+};
+
+export const addEvListenerGameGenre = () => {
+  document.querySelector(`.game__submit`).addEventListener(`click`, function () {
+    if (document.querySelector(`.mySelected`) !== null) {
+      showTemplate(2);
+      addEvListenerGameArtist();
+    }
+  });
+  document.querySelector(`.game__logo`).addEventListener(`click`, function () {
+    showTemplate(0);
+    addEvListenerWelcome();
+  });
+};
