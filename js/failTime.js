@@ -1,5 +1,5 @@
 import throwDomEl from './domEmitter';
-const failTime = throwDomEl(`
+export const failTime = throwDomEl(`
   <section class="result">
     <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
     <h2 class="result__title">Увы и ах!</h2>
@@ -7,4 +7,3 @@ const failTime = throwDomEl(`
 <button class="result__replay" type="button">Попробовать ещё раз</button>
 </section>`);
 
-export default failTime;

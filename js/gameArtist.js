@@ -1,5 +1,6 @@
 import throwDomEl from './domEmitter';
-const gameArtist = throwDomEl(`
+import {showTemplate} from "./showTempByNumber";
+export const gameArtist = throwDomEl(`
   <section class="game game--artist">
     <header class="game__header">
       <a class="game__back" href="#">
@@ -59,4 +60,8 @@ const gameArtist = throwDomEl(`
     </section>
   </section>`);
 
-export default gameArtist;
+export const addEvListener = () => {
+  document.querySelector(`.game__submit`).addEventListener(`click`, function () {
+    showTemplate(2);
+  });
+};

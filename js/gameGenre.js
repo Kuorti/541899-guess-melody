@@ -1,5 +1,5 @@
 import throwDomEl from './domEmitter';
-const gameGenre = throwDomEl(`
+export const gameGenre = throwDomEl(`
   <section class="game game--genre">
     <header class="game__header">
       <a class="game__back" href="#">
@@ -71,10 +71,15 @@ const gameGenre = throwDomEl(`
             <label class="game__check" for="answer-4">Отметить</label>
           </div>
         </div>
-
         <button class="game__submit button" type="submit">Ответить</button>
       </form>
     </section>
   </section>`);
 
-export default gameGenre;
+window.addEventListener(`click`, function () {
+  if (event.target.classList.contains(`game__check`) && !event.target.classList.contains(`mySelected`)) {
+    event.target.classList.add(`mySelected`);
+  } else if (event.target.classList.contains(`game__check`) && event.target.classList.contains(`mySelected`)) {
+    event.target.classList.remove(`mySelected`);
+  }
+});
