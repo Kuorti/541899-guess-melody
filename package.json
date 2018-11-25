@@ -8,7 +8,7 @@
     "start": "gulp serve",
     "eslint": "eslint ./gulpfile.js js/",
     "test": "npm run eslint && npm run stylelint && gulp test",
-    "stylelint": "stylelint ./stylelintrc.less || echo \"lint faild for some file(s).\""
+    "stylelint": "stylelint 'sass/**/*.scss' --syntax scss"
   },
   "devDependencies": {
     "autoprefixer": "9.0.2",
