@@ -6,8 +6,7 @@ const checkClicked = (gameAnswers) => {
   return [...gameAnswers].map((innerEl) => {
     return innerEl.firstChild.nextSibling.checked;
   }).filter((el) => el === true).length;
-}
-
+};
 const bind = (rootElem, {next}, currentQuestion) => {
   if (rootElem.firstChild.nextSibling && rootElem.firstChild.nextSibling.classList.contains(`welcome`)) {
     gameData.initialState.lives = 3;
@@ -21,7 +20,7 @@ const bind = (rootElem, {next}, currentQuestion) => {
     const gameAnswers = rootElem.querySelectorAll(`.game__answer`);
     submitButton.setAttribute(`disabled`, ``);
     gameAnswers.forEach((el) => {
-      el.addEventListener(`click`, (ev) => {
+      el.addEventListener(`click`, () => {
         if (checkClicked(gameAnswers) === 0) {
           submitButton.setAttribute(`disabled`, ``);
         } else {
