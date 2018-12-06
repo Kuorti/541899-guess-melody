@@ -1,15 +1,40 @@
-import {gameData} from "./data/game-data";
+// import {gameData} from "./data/game-data";
 import timer from "./timer";
+import utils from './data/utils';
+import {gameData} from "./data/game-data";
 
 const bind = (rootElem, {next}) => {
-  const submitButton = rootElem.querySelector(`.game__submit`);
-  submitButton.addEventListener(`click`, () => {
-    next();
-  });
+  if (rootElem.firstChild.nextSibling && rootElem.firstChild.nextSibling.classList.contains(`welcome`)) {
+    const startButton = rootElem.querySelector(`.welcome__button`);
+    startButton.addEventListener(`click`, () => {
+      next();
+    });
+  } else if (rootElem.firstChild.nextSibling.classList.contains(`game--genre`)) {
+    console.log(`game--genre`);
+    const submitButton = rootElem.querySelector(`.game__submit`);
+    submitButton.addEventListener(`click`, () => {
+      next();
+    });
+  } else if (rootElem.firstChild.nextSibling.classList.contains(`game--artist`)) {
+    const submitButtons = rootElem.querySelectorAll(`.artist`);
+    submitButtons.forEach((el) => {
+      el.addEventListener(`click`, (event) => {
+        gameData.answers.push({timeForAnswer: 30, isRight: true});
+        utils.countGamePoints();
+        next();
+      });
+    });
+  } else {
+    const submitButton = rootElem.querySelector(`.result__replay`);
+    submitButton.addEventListener(`click`, () => {
+      next();
+    });
+  }
 };
 
-const gameScreenGenre = `<section class="game__screen">
-      <h2 class="game__title">Выберите инди-рок треки</h2>
+const gameScreenGenre = (question) => `<section class="game game--genre">
+    <section class="game__screen">
+      <h2 class="game__title">${question.questionText}</h2>
       <form class="game__tracks">
         <div class="track">
           <button class="track__button track__button--play" type="button"></button>
@@ -56,10 +81,11 @@ const gameScreenGenre = `<section class="game__screen">
         </div>
         <button class="game__submit button" type="submit">Ответить</button>
       </form>
+    </section>
     </section>`;
 
-const gameScreenArtist = `    <section class="game__screen">
-      <h2 class="game__title">Кто исполняет эту песню?</h2>
+const gameScreenArtist = (question) => `    <section class="game__screen">
+      <h2 class="game__title">${question.questionText}</h2>
       <div class="game__track">
         <button class="track__button track__button--play" type="button"></button>
         <audio></audio>
@@ -89,31 +115,58 @@ const gameScreenArtist = `    <section class="game__screen">
       </form>
     </section>`;
 
+const genreHeader = `<section class="game game--genre">`;
+const artistHeader = `<section class="game game--artist">`;
+
 const typeMap = {
-  genre: gameScreenGenre,
-  artist: gameScreenArtist
+  genre: [gameScreenGenre, genreHeader],
+  artist: [gameScreenArtist, artistHeader]
 };
 
-const render = (data, question) => `<section class="game game--genre">
+const render = (data, question) => {
+  if (data.screenType === 0) {
+    return `
+      <section class="welcome">
+        <div class="welcome__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
+        <button class="welcome__button">
+          <span class="visually-hidden">Начать игру</span>
+        </button>
+        <h2 class="welcome__rules-title">Правила игры</h2>
+        <p class="welcome__text">Правила просты:</p>
+        <ul class="welcome__rules-list">
+          <li>За 5 минут нужно ответить на все вопросы.</li>
+          <li>Можно допустить 3 ошибки.</li>
+        </ul>
+        <p class="welcome__text">Удачи!</p>
+      </section>`;
+  } else if (data.screenType === 1) {
+    return `
+    ${typeMap[question.type][1]}
     <header class="game__header">
       <a class="game__back" href="#">
         <span class="visually-hidden">Сыграть ещё раз</span>
         <img class="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию">
       </a>
-        ${typeMap[question.type]}
-        ${timer.render(data.timeLeft)}
-
-      <div class="game__mistakes">
-${
-  data.mistakes
-    .filter((item) => item !== 0)
-    .map(() => `<div class="wrong"></div>`)
-    .reduce((acc, current) => acc + current, ``)
-} 
-
-      </div>
+              ${timer.render(data.timeLeft)}
     </header>
-
+        ${typeMap[question.type][0](question)}
+      <div class="game__mistakes">
+        ${data.mistakes
+        .filter((item) => item !== 0)
+        .map(() => `<div class="wrong"></div>`)
+        .reduce((acc, current) => acc + current, ``)} 
+      </div>
   </section>`;
+  } else {
+    return `
+  <section class="result">
+    <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
+    <h2 class="result__title">Вы настоящий меломан!</h2>
+    <p class="result__total">За 3 минуты и 25 секунд вы набрали ${utils.countGamePoints([100, 10], 2)} баллов (8 быстрых), совершив 3 ошибки</p>
+    <p class="result__text">Вы заняли 2 место из 10. Это лучше чем у 80% игроков</p>
+    <button class="result__replay" type="button">Сыграть ещё раз</button>
+  </section>`;
+  }
+};
 
 export default {render, bind};
