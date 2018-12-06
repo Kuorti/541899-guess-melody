@@ -5,7 +5,7 @@ const countGamePoints = (answersValuesTime, triesLeft) => {
       sum = -1;
     } else if (i % 2 === 0 && answersValuesTime[i] !== 0 && answersValuesTime[i + 1] < 30) {
       sum += answersValuesTime[i] * 2;
-    } else if (i % 2 === 0 && answersValuesTime[i] !== 0 && answersValuesTime[i + 1] > 30) {
+    } else if (i % 2 === 0 && answersValuesTime[i] !== 0 && answersValuesTime[i + 1] >= 30) {
       sum += answersValuesTime[i];
     } else if (i % 2 === 0 && answersValuesTime[i] === 0) {
       sum -= 2;
