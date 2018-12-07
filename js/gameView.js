@@ -1,11 +1,26 @@
 import timer from "./timer";
 import utils from './data/utils';
 import {gameData} from "./data/game-data";
+import {gameScreenGenre} from './gameGenre';
+import {gameScreenArtist} from './gameArtist';
 
 const checkClicked = (gameAnswers) => {
   return [...gameAnswers].map((innerEl) => {
     return innerEl.firstChild.nextSibling.checked;
   }).filter((el) => el === true).length;
+};
+const changeLivesPushAnswer = (el, currentQuestion, condition) => {
+  if (condition) {
+    gameData.initialState.lives--;
+    gameData.answers.push(0, 30);
+  } else {
+    gameData.answers.push(1, 30);
+  }
+};
+const checkLives = () => {
+  if (gameData.initialState.lives <= 0) {
+    gameData.initialState.screenType = 2;
+  }
 };
 const bind = (rootElem, {next}, currentQuestion) => {
   if (rootElem.firstChild.nextSibling && rootElem.firstChild.nextSibling.classList.contains(`welcome`)) {
@@ -28,20 +43,14 @@ const bind = (rootElem, {next}, currentQuestion) => {
         }
       });
     });
-    submitButton.addEventListener(`click`, () => {
+    submitButton.addEventListener(`click`, (el) => {
       let answers = [];
       gameAnswers.forEach((innerEl) => {
         answers.push(innerEl.firstChild.nextSibling.checked);
       });
-      if (JSON.stringify(answers) !== JSON.stringify(gameData.questions[currentQuestion].rightAnswers)) {
-        gameData.initialState.lives--;
-        gameData.answers.push(0, 111);
-      } else {
-        gameData.answers.push(1, 111);
-      }
-      if (gameData.initialState.lives <= 0) {
-        gameData.initialState.screenType = 2;
-      }
+      let condition = (JSON.stringify(answers) !== JSON.stringify(gameData.questions[currentQuestion].rightAnswers));
+      changeLivesPushAnswer(el, currentQuestion, condition);
+      checkLives();
       utils.countGamePoints(gameData.answers, gameData.initialState.lives);
       next();
     });
@@ -49,15 +58,9 @@ const bind = (rootElem, {next}, currentQuestion) => {
     const submitButtons = rootElem.querySelectorAll(`.artist`);
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
-        if (el.firstChild.nextSibling.id !== gameData.questions[currentQuestion].rightAnswers[0]) {
-          gameData.initialState.lives--;
-          gameData.answers.push(0, 30);
-        } else {
-          gameData.answers.push(1, 30);
-        }
-        if (gameData.initialState.lives <= 0) {
-          gameData.initialState.screenType = 2;
-        }
+        let condition = el.firstChild.nextSibling.id !== gameData.questions[currentQuestion].rightAnswers[0];
+        changeLivesPushAnswer(el, currentQuestion, condition);
+        checkLives();
         utils.countGamePoints(gameData.answers, gameData.initialState.lives);
         next();
       });
@@ -69,48 +72,6 @@ const bind = (rootElem, {next}, currentQuestion) => {
     });
   }
 };
-
-const gameScreenGenre = (question) => `<section class="game game--genre">
-    <section class="game__screen">
-      <h2 class="game__title">${question.questionText}</h2>
-      <form class="game__tracks">
-        
-        ${question.artists
-  .map((currentValue, index) => `<div class="track">
-          <button class="track__button track__button--play" type="button"></button>
-          <div class="track__status">
-            <audio></audio>
-          </div>
-          <div class="game__answer">
-            <input class="game__input visually-hidden" type="checkbox" name="answer" value="answer-${index}" id="answer-${index}">
-            <label class="game__check" for="answer-${index}">Отметить</label>
-          </div>
-        </div>`)}
-        <button class="game__submit button" type="submit">Ответить</button>
-      </form>
-    </section>
-    </section>`;
-
-const gameScreenArtist = (question) => `<section class="game__screen">
-      <h2 class="game__title">${question.questionText}</h2>
-      <div class="game__track">
-        <button class="track__button track__button--play" type="button"></button>
-        <audio></audio>
-      </div>
-      <form class="game__artist">
-              ${question.artists
-      .map((currentValue, index) => `
-        <div class="artist">
-          <input class="artist__input visually-hidden" type="radio" name="answer" value="artist-${index}" id="answer-${index}">
-          <label class="artist__name" for="answer-${index}">
-            <img class="artist__picture" src="${currentValue.image}" alt="${currentValue.artist}">
-            ${currentValue.artist}
-          </label>
-        </div>
-    `)
-        .reduce((acc, current) => acc + current, ``)} 
-    </section>
-`;
 
 const genreHeader = `<section class="game game--genre">`;
 const artistHeader = `<section class="game game--artist">`;
