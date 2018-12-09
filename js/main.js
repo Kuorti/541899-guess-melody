@@ -1,36 +1,42 @@
 import {gameData} from './data/game-data';
-import gameView from './gameView';
-import throwDomEl from './domEmitter';
+import WelcomeScreen from "./welcomeScreen";
+import GenreScreen from "./gameGenre";
+import ArtistScreen from "./gameArtist";
+import GameSuccess from "./gameSuccess";
+import GameFail from "./gameFail";
+import utils from './data/utils';
 
-// const currentState = Object.assign({}, gameData.initialState);
-const currentState = gameData.initialState;
+const welcomeScreen = new WelcomeScreen(gameData.initialState.level);
+welcomeScreen.element();
 const questions = gameData.questions;
-const results = gameData.resultData;
-let currentQuestion = -1;
-let questionNumberToSend = null;
-currentState.screenType = 0;
+let newGameElement = null;
 
-const next = () => {
-  let newGameElement = null;
-  if (currentQuestion === questions.length && currentState.screenType !== 0) {
-    currentState.screenType = 2;
+export const next = () => {
+  if (gameData.initialState.currentQuestion === questions.length && gameData.initialState.screenType !== 0) {
+    gameData.initialState.screenType = 2;
   }
-  if (currentState.screenType === 0) {
-    currentQuestion = -1;
-    questionNumberToSend = currentQuestion;
-    newGameElement = throwDomEl(gameView.render(currentState));
-    currentQuestion++;
-    currentState.screenType = 1;
-  } else if (currentState.screenType === 1) {
-    questionNumberToSend = currentQuestion;
-    newGameElement = throwDomEl(gameView.render(currentState, questions[currentQuestion++]));
-  } else if (currentState.screenType === 2) {
-    questionNumberToSend = currentQuestion;
-    newGameElement = throwDomEl(gameView.render(currentState, results));
-    currentState.screenType = 0;
-    currentQuestion = 0;
+  if (gameData.initialState.screenType === 0) {
+    newGameElement = new WelcomeScreen();
+    newGameElement.element();
+    gameData.initialState.screenType = 1;
+  } else if (gameData.initialState.screenType === 1) {
+    if (questions[gameData.initialState.currentQuestion].type === `artist`) {
+      newGameElement = new ArtistScreen(questions[gameData.initialState.currentQuestion], gameData.initialState.currentQuestion);
+      newGameElement.element();
+    } else {
+      newGameElement = new GenreScreen(questions[gameData.initialState.currentQuestion], gameData.initialState.currentQuestion);
+      newGameElement.element();
+    }
+    gameData.initialState.currentQuestion++;
+  } else if (gameData.initialState.screenType === 2) {
+    if (utils.countGamePoints(gameData.answers, gameData.initialState.lives) !== -1) {
+      newGameElement = new GameSuccess();
+      newGameElement.element();
+    } else {
+      newGameElement = new GameFail();
+      newGameElement.element();
+    }
+    gameData.initialState.screenType = 0;
+    gameData.initialState.currentQuestion = 0;
   }
-  gameView.bind(newGameElement, {next}, questionNumberToSend);
 };
-
-next();

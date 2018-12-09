@@ -1,7 +1,20 @@
+import {gameData} from "./game-data";
+
 const MAX_ANSWERS_ARRAY_LENGTH = 20;
 const SLOW_AND_FAST_ANSWERS_EDGE = 30;
 const OUT_OF_TIME_MESSAGE = `Время вышло! Вы не успели отгадать все мелодии`;
 const OUT_OF_TRIES_MESSAGE = `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+
+const resetGame = () => {
+  gameData.initialState = {
+    level: 0,
+    lives: [],
+    screenType: 0,
+    currentQuestion: 0,
+    timeLeft: 300,
+    mistakes: []
+  };
+};
 
 const countGamePoints = (answersValuesTime, triesLeft) => {
   let sum = null;
@@ -44,6 +57,17 @@ const changeLevel = (currentLevel, lastLevel) => {
   }
 };
 
+const throwDomEl = (domString, dontClear) => {
+  const template = document.createElement(`template`);
+  const mainBlock = document.querySelector(`.main`);
+  template.innerHTML += domString;
+  if (!dontClear) {
+    mainBlock.innerHTML = ``;
+  }
+  mainBlock.appendChild(template.content.cloneNode(true));
+  return mainBlock;
+};
+
 const showTimeLeft = (timeFromStart, timeLimit) => {
   if (timeFromStart < timeLimit) {
     return timeLimit - timeFromStart;
@@ -56,4 +80,25 @@ const compareNum = (a, b) => {
   return a - b;
 };
 
-export default {countGamePoints, showResults, changeLevel, showTimeLeft};
+const changeLivesPushAnswer = (el, currentQuestion, condition) => {
+  if (condition) {
+    gameData.initialState.lives.push(1);
+    gameData.answers.push(0, 30);
+  } else {
+    gameData.answers.push(1, 30);
+  }
+};
+
+const checkClicked = (gameAnswers) => {
+  return [...gameAnswers].map((innerEl) => {
+    return innerEl.firstChild.nextSibling.checked;
+  }).filter((el) => el === true).length;
+};
+
+const checkLives = () => {
+  if (gameData.initialState.lives.length > 3) {
+    gameData.initialState.screenType = 2;
+  }
+};
+
+export default {countGamePoints, showResults, changeLevel, showTimeLeft, changeLivesPushAnswer, checkLives, checkClicked, throwDomEl, resetGame};

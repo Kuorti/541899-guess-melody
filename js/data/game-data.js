@@ -1,7 +1,9 @@
 export const gameData = {
   initialState: {
-    lives: 3,
+    level: 0,
+    lives: [],
     screenType: 0,
+    currentQuestion: 0,
     timeLeft: 300,
     mistakes: []
   },
@@ -11,7 +13,7 @@ export const gameData = {
     resultText: [`success`, `fail`]
   },
   questions: [{
-    questionText: `Кто исполняет эту песню?`,
+    questionText: `Кто1 исполняет эту песню?`,
     type: `artist`,
     rightAnswers: [`answer-1`],
     artists: [
@@ -32,7 +34,7 @@ export const gameData = {
       }]
   },
   {
-    questionText: `Выберите инди-рок треки`,
+    questionText: `Выберите2 инди-рок треки`,
     type: `genre`,
     rightAnswers: [true, true],
     artists: [
@@ -52,7 +54,7 @@ export const gameData = {
       }]
   },
   {
-    questionText: `Выберите панк-рок треки`,
+    questionText: `Выберите3 панк-рок треки`,
     type: `genre`,
     rightAnswers: [true, true],
     artists: [
