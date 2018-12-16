@@ -1,6 +1,6 @@
 import throwDomEl from './domEmitter';
 import {showTemplate} from "./showTempByNumber";
-import {addEvListenerWelcome} from './welcomeScreen';
+// import {addEvListenerWelcome} from './welcomeScreen';
 
 export const resultSuccess = throwDomEl(`
   <section class="result">
@@ -14,11 +14,11 @@ export const resultSuccess = throwDomEl(`
 export const addEvListenerSuccess = () => {
   document.querySelector(`.result__replay`).addEventListener(`click`, function () {
     showTemplate(0);
-    addEvListenerWelcome();
+    // addEvListenerWelcome();
   });
   document.querySelector(`document.querySelector(".welcome__logo img")`).addEventListener(`click`, function () {
     showTemplate(0);
-    addEvListenerWelcome();
+    // addEvListenerWelcome();
   });
 };
 

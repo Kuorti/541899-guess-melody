@@ -1,6 +1,9 @@
-import {next} from './main';
 import AbstractView from './AbstractView';
 import {gameData} from "./data/game-data";
+import throwDomEl from "./domEmitter";
+import WelcomeController from "./welcomeController";
+
+// let asdasd = new WelcomeController();
 
 export default class WelcomeScreen extends AbstractView {
   constructor() {
@@ -22,12 +25,16 @@ export default class WelcomeScreen extends AbstractView {
         <p class="welcome__text">Удачи!</p>
       </section>`;
   }
+  render() {
+    throwDomEl(this.template);
+  }
   onAnswer() {
+    let welcomeController = new WelcomeController();
+    welcomeController.handleAnswer();
     gameData.initialState.screenType = 1;
-    next();
   }
   bind() {
-    this.element().querySelector(`.welcome__button`).addEventListener(`click`, () => {
+    document.querySelector(`.welcome__button`).addEventListener(`click`, () => {
       this.onAnswer();
     });
   }

@@ -1,6 +1,6 @@
 import throwDomEl from './domEmitter';
-import {showTemplate} from "./showTempByNumber";
-import {addEvListenerWelcome} from "./welcomeScreen";
+// import {showTemplate} from "./showTempByNumber";
+// import {addEvListenerWelcome} from "./welcomeScreen";
 
 export const failTries = throwDomEl(`
     <section class="result">
@@ -10,13 +10,13 @@ export const failTries = throwDomEl(`
     <button class="result__replay" type="button">Попробовать ещё раз</button>
   </section>`);
 
-export const addEvListenerFail = () => {
-  document.querySelector(`.result__replay`).addEventListener(`click`, function () {
-    showTemplate(0);
-    addEvListenerWelcome();
-  });
-  document.querySelector(`document.querySelector(".welcome__logo img")`).addEventListener(`click`, function () {
-    showTemplate(0);
-    addEvListenerWelcome();
-  });
-};
+// export const addEvListenerFail = () => {
+//   document.querySelector(`.result__replay`).addEventListener(`click`, function () {
+//     showTemplate(0);
+//     addEvListenerWelcome();
+//   });
+//   document.querySelector(`document.querySelector(".welcome__logo img")`).addEventListener(`click`, function () {
+//     showTemplate(0);
+//     addEvListenerWelcome();
+//   });
+// };

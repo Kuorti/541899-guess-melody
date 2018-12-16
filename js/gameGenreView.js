@@ -1,19 +1,26 @@
 import AbstractView from './AbstractView';
-import {next} from './main';
+// import {next} from './main';
 import {gameData} from "./data/game-data";
 import utils from "./data/utils";
-import GameStatisticsView from "./gameStatisticsView";
+import throwDomEl from "./domEmitter";
+import GameController from "./gameController";
 export default class GenreScreen extends AbstractView {
-  constructor(question, questionNumber) {
+  constructor(question, allQuestions, gameModelState) {
     super();
     this.question = question;
-    this.questionNumber = questionNumber;
+    this.allQuestions = allQuestions;
+    this.questionNumber = gameModelState.level;
+    this.answers = [];
   }
-
+  init() {
+    this.render();
+    this.bind();
+  }
+  render() {
+    throwDomEl(this.template);
+  }
   get template() {
-    const statisticsElement = new GameStatisticsView(`genre`);
     return `
-    ${statisticsElement.template}
     <section class="game game--genre">
         <section class="game__screen">
           <h2 class="game__title">${this.question.questionText}</h2>
@@ -34,11 +41,12 @@ export default class GenreScreen extends AbstractView {
      </section>`;
   }
   onAnswer() {
+    let asdsa = new GameController();
+    asdsa.handleAnswer(this.question, this.answers);
   }
   bind() {
-    const submitButton = this.element().querySelector(`.game__submit`);
-    const gameAnswers = this.element().querySelectorAll(`.game__answer`);
-    const gameBack = this.element().querySelector(`.game__back`);
+    const submitButton = document.querySelector(`.game__submit`);
+    const gameAnswers = document.querySelectorAll(`.game__answer`);
     submitButton.setAttribute(`disabled`, ``);
     gameAnswers.forEach((el) => {
       el.addEventListener(`click`, () => {
@@ -49,20 +57,15 @@ export default class GenreScreen extends AbstractView {
         }
       });
     });
-    gameBack.addEventListener(`click`, () => {
-      utils.resetGame();
-      next();
-    });
     submitButton.addEventListener(`click`, (el) => {
-      let answers = [];
       gameAnswers.forEach((innerEl) => {
-        answers.push(innerEl.firstChild.nextSibling.checked);
+        this.answers.push(innerEl.firstChild.nextSibling.checked);
       });
-      let condition = (JSON.stringify(answers) !== JSON.stringify(gameData.questions[this.questionNumber].rightAnswers));
-      utils.changeLivesPushAnswer(el, this.question, condition);
-      utils.checkLives();
-      utils.countGamePoints(gameData.answers, gameData.initialState.lives);
-      next();
+      let condition = (JSON.stringify(this.answers) !== JSON.stringify(this.allQuestions[this.questionNumber].rightAnswers));
+      // utils.changeLivesPushAnswer(el, this.question, condition);
+      // utils.checkLives();
+      // utils.countGamePoints(gameData.answers, gameData.initialState.lives);
+      // next();
       this.onAnswer();
     });
   }

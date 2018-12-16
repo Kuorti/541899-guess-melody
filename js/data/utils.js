@@ -57,14 +57,18 @@ const changeLevel = (currentLevel, lastLevel) => {
   }
 };
 
-const throwDomEl = (domString, dontClear) => {
+const throwDomEl = (domString, dontClear, append) => {
   const template = document.createElement(`template`);
   const mainBlock = document.querySelector(`.main`);
   template.innerHTML += domString;
   if (!dontClear) {
     mainBlock.innerHTML = ``;
   }
-  mainBlock.appendChild(template.content.cloneNode(true));
+  if (!append) {
+    mainBlock.appendChild(template.content.cloneNode(true));
+  } else {
+    mainBlock.firstElementChild.appendChild(template.content.cloneNode(true));
+  }
   return mainBlock;
 };
 

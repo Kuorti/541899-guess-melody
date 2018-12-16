@@ -1,5 +1,5 @@
 import AbstractView from './AbstractView';
-import {next} from './main';
+// import {next} from './main';
 // import {gameData} from "./data/game-data";
 import utils from "./data/utils";
 export default class GameFail extends AbstractView {
@@ -21,7 +21,7 @@ export default class GameFail extends AbstractView {
     const submitButton = this.element().querySelector(`.result__replay`);
     submitButton.addEventListener(`click`, () => {
       utils.resetGame();
-      next();
+      // next();
       this.onAnswer();
     });
   }
