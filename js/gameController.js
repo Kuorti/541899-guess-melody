@@ -2,56 +2,49 @@ import GameModel from "./gameModel";
 import GameGenre from "./gameGenreView";
 import GameArtist from "./gameArtistView";
 import GameStatistics from "./gameStatisticsView";
-import StatisticsController from "./statisticsController";
+import Application from "./router";
 const ONE_SECOND = 1000;
 
 export default class GameScreen {
   constructor() {
     this.gameModel = new GameModel();
+    this.gameStatisticsView = new GameStatistics(this.gameModel.getQuestions()[this.gameModel.getState().level].type, this.gameModel.getState());
     this.view = null;
-    this.statisticsController = new StatisticsController(this.gameModel.getQuestions()[this.gameModel.getState().level].type);
   }
   init() {
-    this.startTimer();
-    this.createView();
+    this.createGameView();
+    this.createStatisticsView();
   }
-  createView() {
+  resetData() {
+    this.gameModel.state = {
+      level: 0,
+      lives: [1, 1, 1],
+      timeLeft: 300
+    };
+  }
+  createStatisticsView() {
+    this.gameStatisticsView.init();
+  }
+  createGameView() {
+    this.startTimer();
     const question = this.gameModel.getQuestions()[this.gameModel.getState().level];
     const ViewClass = question.type === `genre` ? GameGenre : GameArtist;
-    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState());
-    // const gameStatistics = new GameStatistics();
-    // const statisticsController = new StatisticsController(question.type);
-
-    // gameTemplate.render();
-    // gameTemplate.bind();
+    const handler = this.handleAnswer;
+    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), this, handler);
     gameTemplate.init();
-    // gameStatistics.render();
-    // gameStatistics.bind();
-    this.statisticsController.init();
   }
-  // updateStatistics() {
-  //   updateView(headerElement, new HeaderView)
-  // }
-  // checkLives() {
-  //   if (condition) {
-  //     gameData.initialState.lives.push(1);
-  //     gameData.answers.push(0, 30);
-  //   } else {
-  //     gameData.answers.push(1, 30);
-  //   }
-  // }
-  handleAnswer(answerTime, condition) {
-    // this.stopTimer();
-    if (!condition) {
-      this.gameModel.minusLife();
+  handleAnswer(answerTime, condition, _this) {
+    _this.stopTimer();
+    if (condition) {
+      _this.gameModel.minusLife();
     }
-    this.gameModel.answers.push(condition, answerTime);
-    if (this.checkGameCondition()) {
-      this.gameModel.nextLevel();
-      console.log(this.gameModel.getState());
-      this.statisticsController.updateView(this.gameModel.getState());
+    _this.gameModel.answers.push(!condition, answerTime);
+    if (_this.checkGameCondition() && (_this.gameModel.getState().level < _this.gameModel.getQuestions().length - 1)) {
+      _this.gameModel.nextLevel();
+      _this.gameStatisticsView.updateView(_this.gameModel.getState());
+      _this.createGameView();
     } else {
-      console.log("YOU FAILED");
+      Application.showStats(_this.gameModel.getState(), _this.gameModel.getAnswers());
     }
   }
   checkGameCondition() {
@@ -59,7 +52,7 @@ export default class GameScreen {
   }
   tick() {
     this.gameModel.minusSec();
-    this.statisticsController.updateView(this.gameModel.getState());
+    this.gameStatisticsView.updateView(this.gameModel.getState());
   }
   startTimer() {
     this.timer = setTimeout(() => {
@@ -70,8 +63,4 @@ export default class GameScreen {
   stopTimer() {
     clearTimeout(this.timer);
   }
-  // restart(continueGame) {
-  //   if (!continueGame) {
-  //   }
-  // }
 }

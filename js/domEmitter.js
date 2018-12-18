@@ -1,14 +1,15 @@
-const throwDomEl = (domString, noClear = false, deletePrevious = false) => {
+const throwDomEl = (domString, noClear = false) => {
   const template = document.createElement(`template`);
   const mainBlock = document.querySelector(`.main`);
   template.innerHTML = domString;
   if (!noClear) {
     mainBlock.innerHTML = ``;
   }
-  if (deletePrevious) {
-    mainBlock.removeChild(mainBlock.lastElementChild);
+  const element = template.content.cloneNode(true);
+  if (mainBlock.querySelector(`.` + element.firstElementChild.classList[1])) {
+    mainBlock.querySelector(`.` + element.firstElementChild.classList[1]).remove();
   }
-  mainBlock.appendChild(template.content.cloneNode(true));
+  mainBlock.appendChild(element);
   return mainBlock;
 };
 

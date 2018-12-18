@@ -1,15 +1,14 @@
 import WelcomeController from "./welcomeController";
-// import GameModel from "./gameModel";
-// import GameScreen from "./gameController";
-import GameStatisticsView from "./gameStatisticsView";
+import ResultsController from "./resultsController";
 import GameController from './gameController';
-
-const welcomeController = new WelcomeController();
 const gameController = new GameController();
 
 export default class Application {
 
   static showWelcome() {
+    gameController.resetData();
+    gameController.stopTimer();
+    const welcomeController = new WelcomeController();
     welcomeController.init();
   }
 
@@ -17,9 +16,9 @@ export default class Application {
     gameController.init();
   }
 
-  static showStats(stats) {
-    const statistics = new GameStatisticsView(stats);
-    // changeView(statistics.element());
+  static showStats(stats, answers) {
+    const resultsController = new ResultsController(stats, answers);
+    resultsController.init();
   }
 }
 

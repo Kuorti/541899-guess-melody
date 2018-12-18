@@ -1,24 +1,20 @@
 import AbstractView from './AbstractView';
-// import {gameData} from "./data/game-data";
-// import utils from "./data/utils";
 import throwDomEl from "./domEmitter";
-import GameController from './gameController';
-// import GameScreen from "./gameView";
-// import GameStatisticsView from "./gameStatisticsView";
 export default class GameArtist extends AbstractView {
-  constructor(question, allQuestions, gameModelState) {
+  constructor(question, allQuestions, gameState, _this, handler) {
     super();
+    this._this = _this;
+    this.handler = handler;
+    this.gameState = gameState;
     this.question = question;
     this.allQuestions = allQuestions;
-    this.questionNumber = gameModelState.level;
-    this.gameController = new GameController();
+    this.questionNumber = this.gameState.level;
   }
   init() {
     this.render();
     this.bind();
   }
   render() {
-    // return throwDomEl(this.template);
     return throwDomEl(this.template);
   }
   get template() {
@@ -44,18 +40,15 @@ export default class GameArtist extends AbstractView {
     </section>`;
   }
   onAnswer(question, condition) {
-    this.gameController.handleAnswer(question, condition);
+    this.handler(question, condition, this._this);
   }
 
   bind() {
-    const submitButtons = document.querySelectorAll(`.artist`);
+    const submitButtons = document.querySelectorAll(`.artist input`);
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
-        let condition = el.firstChild.nextSibling.id !== this.allQuestions[this.questionNumber].rightAnswers[0];
+        let condition = el.id !== this.allQuestions[this.questionNumber].rightAnswers[0];
         let answerTime = 30;
-        // utils.changeLivesPushAnswer(el, this.question, condition);
-        // utils.checkLives();
-        // utils.countGamePoints(gameData.answers, gameData.initialState.lives);
         this.onAnswer(answerTime, condition);
       });
     });

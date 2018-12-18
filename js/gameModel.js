@@ -1,5 +1,3 @@
-import {gameData} from "./data/game-data";
-
 const QUESTIONS = [{
   questionText: `Кто1 исполняет эту песню?`,
   type: `artist`,
@@ -17,8 +15,7 @@ const QUESTIONS = [{
       name: `In the Land of Rhinoplasty`,
       image: `https://i.vimeocdn.com/portrait/992615_300x300`,
       src: `https://www.youtube.com/audiolibrary_download?vid=dc3b4dc549becd6b`,
-      genre: `Rock`,
-      isRight: false
+      genre: `Rock`
     }]
 },
 {
@@ -182,7 +179,7 @@ const QUESTIONS = [{
     }]
 },
 {
-  questionText: `Выберите инди-рок треки`,
+  questionText: `Выберите последние треки`,
   type: `artist`,
   rightAnswers: [true, true],
   artists: [
@@ -225,22 +222,13 @@ export default class GameModel {
   minusSec() {
     this.state.timeLeft = this.state.timeLeft - 1;
   }
-  die() {
-    // this._state = die(this._state);
-  }
-  restart() {
-    this._state = gameData.initialState;
-  }
   getState() {
     return this.state;
   }
+  getAnswers() {
+    return this.answers;
+  }
   getQuestions() {
     return this.questions;
-  }
-  isDead() {
-    return this._state.lives <= 0;
-  }
-  getCurrentLevel() {
-    // return getLevel(this._state);
   }
 }

@@ -1,21 +1,22 @@
-// import {gameData} from "./data/game-data";
 import AbstractView from './AbstractView';
-import GameTimer from "./timer";
-import utils from "./data/utils";
 import throwDomEl from "./domEmitter";
-// import {next} from "./main";
+import Application from "./router";
 export default class GameStatisticsView extends AbstractView {
   constructor(headerType, gameData) {
     super();
     this.headerType = headerType;
     this.gameData = gameData;
-    console.log(this.gameData);
+  }
+  updateView(gameData) {
+    this.gameData = gameData;
+    this.init();
+  }
+  init() {
+    this.render();
+    this.bind();
   }
   render() {
     return throwDomEl(this.template, true);
-  }
-  updateView() {
-    return throwDomEl(this.template, true, true);
   }
   get template() {
     return `<section class="game game--${this.headerType}">
@@ -43,10 +44,9 @@ export default class GameStatisticsView extends AbstractView {
       </div></header>`;
   }
   bind() {
-    const gameBack = this.render().querySelector(`.game__back`);
+    const gameBack = document.querySelector(`.game__back`);
     gameBack.addEventListener(`click`, () => {
-      utils.resetGame();
-      // next();
+      Application.showWelcome();
     });
   }
 }

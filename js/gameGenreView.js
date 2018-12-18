@@ -1,15 +1,15 @@
 import AbstractView from './AbstractView';
-// import {next} from './main';
-import {gameData} from "./data/game-data";
 import utils from "./data/utils";
 import throwDomEl from "./domEmitter";
-import GameController from "./gameController";
 export default class GenreScreen extends AbstractView {
-  constructor(question, allQuestions, gameModelState) {
+  constructor(question, allQuestions, gameState, _this, handler) {
     super();
+    this._this = _this;
+    this.handler = handler;
+    this.gameState = gameState;
     this.question = question;
     this.allQuestions = allQuestions;
-    this.questionNumber = gameModelState.level;
+    this.questionNumber = this.gameState.level;
     this.answers = [];
   }
   init() {
@@ -21,7 +21,6 @@ export default class GenreScreen extends AbstractView {
   }
   get template() {
     return `
-    <section class="game game--genre">
         <section class="game__screen">
           <h2 class="game__title">${this.question.questionText}</h2>
           <form class="game__tracks">
@@ -40,9 +39,8 @@ export default class GenreScreen extends AbstractView {
           </form>
      </section>`;
   }
-  onAnswer() {
-    let asdsa = new GameController();
-    asdsa.handleAnswer(this.question, this.answers);
+  onAnswer(question, condition) {
+    this.handler(question, condition, this._this);
   }
   bind() {
     const submitButton = document.querySelector(`.game__submit`);
@@ -57,16 +55,13 @@ export default class GenreScreen extends AbstractView {
         }
       });
     });
-    submitButton.addEventListener(`click`, (el) => {
+    submitButton.addEventListener(`click`, () => {
       gameAnswers.forEach((innerEl) => {
         this.answers.push(innerEl.firstChild.nextSibling.checked);
       });
       let condition = (JSON.stringify(this.answers) !== JSON.stringify(this.allQuestions[this.questionNumber].rightAnswers));
-      // utils.changeLivesPushAnswer(el, this.question, condition);
-      // utils.checkLives();
-      // utils.countGamePoints(gameData.answers, gameData.initialState.lives);
-      // next();
-      this.onAnswer();
+      let answerTime = 30;
+      this.onAnswer(answerTime, condition);
     });
   }
 }
