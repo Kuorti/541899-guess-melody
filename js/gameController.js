@@ -29,36 +29,44 @@ export default class GameScreen {
     this.startTimer();
     const question = this.gameModel.getQuestions()[this.gameModel.getState().level];
     const ViewClass = question.type === `genre` ? GameGenre : GameArtist;
-    const handler = this.handleAnswer;
-    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), this, handler);
+    const handler = (answerTime, condition) => this.handleAnswer(answerTime, condition);
+    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), handler);
     gameTemplate.init();
   }
-  handleAnswer(answerTime, condition, _this) {
-    _this.stopTimer();
+  handleAnswer(answerTime, condition) {
+    this.stopTimer();
     if (condition) {
-      _this.gameModel.minusLife();
+      this.gameModel.minusLife();
     }
-    _this.gameModel.answers.push(!condition, answerTime);
-    if (_this.checkGameCondition() && (_this.gameModel.getState().level < _this.gameModel.getQuestions().length - 1)) {
-      _this.gameModel.nextLevel();
-      _this.gameStatisticsView.updateView(_this.gameModel.getState());
-      _this.createGameView();
+    this.gameModel.answers.push(!condition, answerTime);
+    if (this.checkGameCondition() && (this.gameModel.getState().level < this.gameModel.getQuestions().length - 1)) {
+      this.gameModel.nextLevel();
+      this.createGameView();
+      this.gameStatisticsView.updateView(this.gameModel.getState());
     } else {
-      Application.showStats(_this.gameModel.getState(), _this.gameModel.getAnswers());
+      Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
     }
   }
   checkGameCondition() {
     return this.gameModel.getState().lives.length > 0;
   }
+  checkTimeLeft() {
+    return this.gameModel.getState().timeLeft <= 0;
+  }
   tick() {
-    this.gameModel.minusSec();
-    this.gameStatisticsView.updateView(this.gameModel.getState());
+    this.timer = setTimeout(() => {
+      this.gameModel.minusSec();
+      this.gameStatisticsView.updateView(this.gameModel.getState());
+      this.tick();
+    }, ONE_SECOND);
+    if (this.checkTimeLeft()) {
+      this.stopTimer();
+      Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
+    }
   }
   startTimer() {
-    this.timer = setTimeout(() => {
-      this.tick();
-      this.startTimer();
-    }, ONE_SECOND);
+    this.gameStatisticsView.updateView(this.gameModel.getState());
+    this.tick();
   }
   stopTimer() {
     clearTimeout(this.timer);

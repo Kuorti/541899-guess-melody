@@ -6,8 +6,8 @@ const gameController = new GameController();
 export default class Application {
 
   static showWelcome() {
-    gameController.resetData();
     gameController.stopTimer();
+    gameController.resetData();
     const welcomeController = new WelcomeController();
     welcomeController.init();
   }

@@ -2,9 +2,8 @@ import AbstractView from './AbstractView';
 import utils from "./data/utils";
 import throwDomEl from "./domEmitter";
 export default class GenreScreen extends AbstractView {
-  constructor(question, allQuestions, gameState, _this, handler) {
+  constructor(question, allQuestions, gameState, handler) {
     super();
-    this._this = _this;
     this.handler = handler;
     this.gameState = gameState;
     this.question = question;
@@ -40,7 +39,7 @@ export default class GenreScreen extends AbstractView {
      </section>`;
   }
   onAnswer(question, condition) {
-    this.handler(question, condition, this._this);
+    this.handler(question, condition);
   }
   bind() {
     const submitButton = document.querySelector(`.game__submit`);
