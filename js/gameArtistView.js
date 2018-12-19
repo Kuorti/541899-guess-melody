@@ -46,8 +46,8 @@ export default class GameArtist extends AbstractView {
     const submitButtons = document.querySelectorAll(`.artist input`);
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
-        let answersState = this.allQuestions[this.questionNumber].answers.map((el) => {
-          return el.isCorrect;
+        let answersState = this.allQuestions[this.questionNumber].answers.map((element) => {
+          return element.isCorrect;
         });
         let condition = answersState[el.id.substr(el.id.length - 1)];
         let answerTime = 30;

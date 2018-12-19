@@ -1,9 +1,7 @@
 import WelcomeController from "./welcomeController";
 import ResultsController from "./resultsController";
 import GameController from './gameController';
-// const gameController = new GameController();
 let gameController = null;
-let serverData = null;
 
 export default class Application {
 
@@ -14,7 +12,7 @@ export default class Application {
       .then((response) => (response.json()))
       .then((data) => (gameController = new GameController(data)))
       .then(() => this.showWelcome());
-        // .then(() => preloader.stop());
+    // .then(() => preloader.stop());
   }
 
   static showWelcome() {
