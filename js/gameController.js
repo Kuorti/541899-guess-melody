@@ -4,10 +4,12 @@ import GameArtist from "./gameArtistView";
 import GameStatistics from "./gameStatisticsView";
 import Application from "./router";
 const ONE_SECOND = 1000;
+const LOW_TIME_EDGE = 30;
 
 export default class GameScreen {
-  constructor() {
-    this.gameModel = new GameModel();
+  constructor(serverData) {
+    this.serverData = serverData;
+    this.gameModel = new GameModel(this.serverData);
     this.gameStatisticsView = new GameStatistics(this.gameModel.getQuestions()[this.gameModel.getState().level].type, this.gameModel.getState());
     this.view = null;
   }
@@ -55,8 +57,12 @@ export default class GameScreen {
   }
   tick() {
     this.timer = setTimeout(() => {
+      let timeLeft = this.gameModel.getState().timeLeft;
       this.gameModel.minusSec();
       this.gameStatisticsView.updateView(this.gameModel.getState());
+      if (timeLeft < LOW_TIME_EDGE) {
+        this.gameStatisticsView.createlowTimeEffect();
+      }
       this.tick();
     }, ONE_SECOND);
     if (this.checkTimeLeft()) {

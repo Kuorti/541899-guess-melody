@@ -21,9 +21,9 @@ export default class GenreScreen extends AbstractView {
   get template() {
     return `
         <section class="game__screen">
-          <h2 class="game__title">${this.question.questionText}</h2>
+          <h2 class="game__title">${this.question.question}</h2>
           <form class="game__tracks">
-            ${this.question.artists
+            ${this.question.answers
           .map((currentValue, index) => `<div class="track">
               <button class="track__button track__button--play" type="button"></button>
               <div class="track__status">
@@ -40,6 +40,11 @@ export default class GenreScreen extends AbstractView {
   }
   onAnswer(question, condition) {
     this.handler(question, condition);
+  }
+  prepareRightAnswers() {
+    let answersOptions = [];
+    this.allQuestions[this.questionNumber].answers.forEach((el) => answersOptions.push(el.genre));
+    return answersOptions;
   }
   bind() {
     const submitButton = document.querySelector(`.game__submit`);
@@ -58,7 +63,10 @@ export default class GenreScreen extends AbstractView {
       gameAnswers.forEach((innerEl) => {
         this.answers.push(innerEl.firstChild.nextSibling.checked);
       });
-      let condition = (JSON.stringify(this.answers) !== JSON.stringify(this.allQuestions[this.questionNumber].rightAnswers));
+      const rightAnswers = this.prepareRightAnswers().map((el) => {
+        return el === this.allQuestions[this.questionNumber].genre;
+      });
+      let condition = (JSON.stringify(this.answers) !== JSON.stringify(rightAnswers));
       let answerTime = 30;
       this.onAnswer(answerTime, condition);
     });

@@ -37,6 +37,8 @@
 }
 
 .timer__value--finished {
+  position: relative;
+  left: 121px !important;
   animation: shrink 2000ms infinite;
   color: red;
 

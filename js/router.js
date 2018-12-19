@@ -1,11 +1,24 @@
 import WelcomeController from "./welcomeController";
 import ResultsController from "./resultsController";
 import GameController from './gameController';
-const gameController = new GameController();
+// const gameController = new GameController();
+let gameController = null;
+let serverData = null;
 
 export default class Application {
 
+  static start() {
+    // const preloader = new Preloader();
+    // preloader.init();
+    window.fetch(`https://es.dump.academy/guess-melody/questions`)
+      .then((response) => (response.json()))
+      .then((data) => (gameController = new GameController(data)))
+      .then(() => this.showWelcome());
+        // .then(() => preloader.stop());
+  }
+
   static showWelcome() {
+
     gameController.stopTimer();
     gameController.resetData();
     const welcomeController = new WelcomeController();
@@ -21,5 +34,3 @@ export default class Application {
     resultsController.init();
   }
 }
-
-Application.showWelcome();

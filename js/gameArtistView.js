@@ -19,19 +19,19 @@ export default class GameArtist extends AbstractView {
   get template() {
     return `
     <section class="game__screen">
-      <h2 class="game__title">${this.question.questionText}</h2>
+      <h2 class="game__title">${this.question.question}</h2>
       <div class="game__track">
         <button class="track__button track__button--play" type="button"></button>
         <audio></audio>
       </div>
       <form class="game__artist">
-              ${this.question.artists
+              ${this.question.answers
       .map((currentValue, index) => `
         <div class="artist">
           <input class="artist__input visually-hidden" type="radio" name="answer" value="artist-${index}" id="answer-${index}">
           <label class="artist__name" for="answer-${index}">
-            <img class="artist__picture" src="${currentValue.image}" alt="${currentValue.artist}">
-            ${currentValue.artist}
+            <img class="artist__picture" src="${currentValue.image.url}" alt="${currentValue.title}">
+            ${currentValue.title}
           </label>
         </div>
     `)
@@ -46,7 +46,10 @@ export default class GameArtist extends AbstractView {
     const submitButtons = document.querySelectorAll(`.artist input`);
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
-        let condition = el.id !== this.allQuestions[this.questionNumber].rightAnswers[0];
+        let answersState = this.allQuestions[this.questionNumber].answers.map((el) => {
+          return el.isCorrect;
+        });
+        let condition = answersState[el.id.substr(el.id.length - 1)];
         let answerTime = 30;
         this.onAnswer(answerTime, condition);
       });
