@@ -32,8 +32,12 @@ export default class GameScreen {
     const question = this.gameModel.getQuestions()[this.gameModel.getState().level];
     const ViewClass = question.type === `genre` ? GameGenre : GameArtist;
     const handler = (answerTime, condition) => this.handleAnswer(answerTime, condition);
-    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), handler);
+    const audioHandler = (event) => this.handleAudioClick(event);
+    const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), handler, audioHandler);
     gameTemplate.init();
+  }
+  handleAudioClick(event) {
+    console.log(event);
   }
   handleAnswer(answerTime, condition) {
     this.stopTimer();
@@ -45,9 +49,15 @@ export default class GameScreen {
       this.gameModel.nextLevel();
       this.createGameView();
       this.gameStatisticsView.updateView(this.gameModel.getState());
+    } else if (this.checkGameCondition() && (this.gameModel.getState().level >= this.gameModel.getQuestions().length - 1)) {
+      this.saveSuccessResult();
+      Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
     } else {
       Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
     }
+  }
+  saveSuccessResult() {
+    console.log(`push success statistics`);
   }
   checkGameCondition() {
     return this.gameModel.getState().lives.length > 0;
@@ -76,5 +86,36 @@ export default class GameScreen {
   }
   stopTimer() {
     clearTimeout(this.timer);
+  }
+  onArtistControlClick(evt) {
+    const audio = evt.target.parentNode.querySelector(`audio`);
+    if (evt.target.classList.contains(`player-control--pause`)) {
+      audio.pause();
+      evt.target.classList.remove(`player-control--pause`);
+      evt.target.classList.add(`player-control--play`);
+    } else if (evt.target.classList.contains(`player-control--play`)) {
+      audio.play();
+      evt.target.classList.remove(`player-control--play`);
+      evt.target.classList.add(`player-control--pause`);
+    }
+  }
+  onControlClick(evt) {
+    const audio = evt.target.parentNode.querySelector(`audio`);
+    if (evt.target.classList.contains(`player-control--pause`)) {
+      audio.pause();
+      evt.target.classList.remove(`player-control--pause`);
+      evt.target.classList.add(`player-control--play`);
+    } else if (evt.target.classList.contains(`player-control--play`)) {
+      Array.from(this.view.level.tracks, (it) => {
+        it.pause();
+      });
+      Array.from(this.view.level.controls, (it) => {
+        it.classList.remove(`player-control--pause`);
+        it.classList.add(`player-control--play`);
+      });
+      audio.play();
+      evt.target.classList.remove(`player-control--play`);
+      evt.target.classList.add(`player-control--pause`);
+    }
   }
 }

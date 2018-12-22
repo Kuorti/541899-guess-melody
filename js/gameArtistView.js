@@ -44,6 +44,8 @@ export default class GameArtist extends AbstractView {
 
   bind() {
     const submitButtons = document.querySelectorAll(`.artist input`);
+    const audioButton = document.querySelectorAll(`.track__button--play`);
+
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
         let answersState = this.allQuestions[this.questionNumber].answers.map((element) => {
@@ -54,5 +56,10 @@ export default class GameArtist extends AbstractView {
         this.onAnswer(answerTime, condition);
       });
     });
+    audioButton.addEventListener(`click`, (event) => {
+      el.classList.add(`track__button--play`);
+    })
+
   }
+
 }
