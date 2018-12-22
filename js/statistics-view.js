@@ -1,7 +1,7 @@
-import AbstractView from './AbstractView';
-import throwDomEl from "./domEmitter";
+import AbstractView from './abstract-view';
+import throwDomEl from "./dom-emitter";
 import Application from "./router";
-export default class GameStatisticsView extends AbstractView {
+export default class StatisticsView extends AbstractView {
   constructor(headerType, gameData) {
     super();
     this.headerType = headerType;

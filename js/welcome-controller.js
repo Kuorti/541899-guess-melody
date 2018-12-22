@@ -1,5 +1,5 @@
 import Application from "./router";
-import WelcomeView from "./welcomeView";
+import WelcomeView from "./welcome-view";
 
 const WelcomePage = new WelcomeView();
 

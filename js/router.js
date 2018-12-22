@@ -1,6 +1,7 @@
-import WelcomeController from "./welcomeController";
-import ResultsController from "./resultsController";
-import GameController from './gameController';
+import WelcomeController from "./welcome-controller";
+import ResultsController from "./results-controller";
+import GameController from './game-controller';
+import StatisticsLoader from './statistics-loader-sender';
 let gameController = null;
 
 export default class Application {
@@ -8,15 +9,13 @@ export default class Application {
   static start() {
     // const preloader = new Preloader();
     // preloader.init();
-    window.fetch(`https://es.dump.academy/guess-melody/questions`)
-      .then((response) => (response.json()))
+    StatisticsLoader.loadData()
       .then((data) => (gameController = new GameController(data)))
       .then(() => this.showWelcome());
     // .then(() => preloader.stop());
   }
 
   static showWelcome() {
-
     gameController.stopTimer();
     gameController.resetData();
     const welcomeController = new WelcomeController();

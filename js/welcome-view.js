@@ -1,7 +1,7 @@
-import AbstractView from './AbstractView';
+import AbstractView from './abstract-view';
 import {gameData} from "./data/game-data";
-import throwDomEl from "./domEmitter";
-import WelcomeController from "./welcomeController";
+import throwDomEl from "./dom-emitter";
+import WelcomeController from "./welcome-controller";
 
 // let asdasd = new WelcomeController();
 

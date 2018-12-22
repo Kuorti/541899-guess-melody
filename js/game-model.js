@@ -9,7 +9,8 @@ export default class GameModel {
     this.state = {
       level: 0,
       lives: [1, 1, 1],
-      timeLeft: 300
+      timeLeft: 300,
+      cheatMode: 1
     };
   }
   nextLevel() {

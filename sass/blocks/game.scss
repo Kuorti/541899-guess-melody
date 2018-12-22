@@ -132,6 +132,11 @@
   animation-iteration-count: 1;
 }
 
+.cheat_mode_right {
+  color: lightgreen;
+  border: 1px solid lightgreen;
+}
+
 @keyframes fadein {
   0% {
     opacity: 0;

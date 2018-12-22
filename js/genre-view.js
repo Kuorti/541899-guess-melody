@@ -1,11 +1,10 @@
-import AbstractView from './AbstractView';
+import AbstractView from './abstract-view';
 import utils from "./data/utils";
-import throwDomEl from "./domEmitter";
+import throwDomEl from "./dom-emitter";
 export default class GenreScreen extends AbstractView {
-  constructor(question, allQuestions, gameState, handler, audioHandler) {
+  constructor(question, allQuestions, gameState, handler) {
     super();
     this.handler = handler;
-    this.audioHandler = audioHandler;
     this.gameState = gameState;
     this.question = question;
     this.allQuestions = allQuestions;
@@ -26,9 +25,9 @@ export default class GenreScreen extends AbstractView {
           <form class="game__tracks">
             ${this.question.answers
           .map((currentValue, index) => `<div class="track">
-              <button class="track__button track__button--play" type="button"></button>
-              <div class="track__status">
-                  <audio src="${currentValue.src}"></audio>
+              <button class="track__button track__button--${index === 0 ? `pause` : `play`}" type="button"></button>
+              <div class="track__status ${this.gameState.cheatMode ? `cheat_mode_` : ``}${this.question.genre === this.question.answers[index].genre ? `right` : ``}">
+                  <audio class="${index === 0 ? `already-played` : ``}" ${index === 0 ? `autoplay` : ``} src="${currentValue.src}"></audio>
               </div>
               <div class="game__answer">
                 <input class="game__input visually-hidden" type="checkbox" name="answer" value="answer-${index}" id="answer-${index}">
@@ -39,21 +38,36 @@ export default class GenreScreen extends AbstractView {
           </form>
      </section>`;
   }
-  onAnswer(question, condition) {
-    this.handler(question, condition);
-  }
-  onAudioClick(event) {
-    this.audioHandler(event);
+  onAnswer(condition) {
+    this.handler(condition);
   }
   prepareRightAnswers() {
     let answersOptions = [];
     this.allQuestions[this.questionNumber].answers.forEach((el) => answersOptions.push(el.genre));
     return answersOptions;
   }
+  resetPlayingClasses() {
+    document.querySelectorAll(`.track button`).forEach((elem) => {
+      if (elem.classList.contains(`track__button--pause`)) {
+        elem.classList.remove(`track__button--pause`);
+      }
+      if (!elem.classList.contains(`track__button--play`)) {
+        elem.classList.add(`track__button--play`);
+      }
+    });
+  }
+  stopAllAudio() {
+    document.querySelectorAll(`.track__status audio`).forEach((el) => {
+      if (el.classList.contains(`already-played`)) {
+        el.classList.remove(`already-played`);
+      }
+      el.pause();
+    });
+  }
   bind() {
     const submitButton = document.querySelector(`.game__submit`);
     const gameAnswers = document.querySelectorAll(`.game__answer`);
-    const audioButtons = document.querySelectorAll(`.track__button--play`);
+    const audioButtons = document.querySelectorAll(`.track__button`);
     submitButton.setAttribute(`disabled`, ``);
     gameAnswers.forEach((el) => {
       el.addEventListener(`click`, () => {
@@ -72,16 +86,16 @@ export default class GenreScreen extends AbstractView {
         return el === this.allQuestions[this.questionNumber].genre;
       });
       let condition = (JSON.stringify(this.answers) !== JSON.stringify(rightAnswers));
-      let answerTime = 30;
-      this.onAnswer(answerTime, condition);
+      this.onAnswer(condition);
     });
     audioButtons.forEach((el) => {
       el.addEventListener(`click`, (event) => {
         let audioElement = event.target.nextElementSibling.firstChild.nextSibling;
         if (!audioElement.classList.contains(`already-played`)) {
-          el.classList.remove(`track__button--play`);
-          el.classList.add(`track__button--pause`);
+          this.resetPlayingClasses();
+          this.stopAllAudio();
           audioElement.classList.add(`already-played`);
+          el.classList.add(`track__button--pause`);
           audioElement.play();
         } else {
           el.classList.add(`track__button--play`);

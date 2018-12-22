@@ -1,7 +1,7 @@
-import throwDomEl from './domEmitter';
-import AbstractView from "./AbstractView";
+import throwDomEl from './dom-emitter';
+import AbstractView from "./abstract-view";
 
-export default class ResultSuccessView extends AbstractView {
+export default class SuccessResultView extends AbstractView {
   constructor(screenTypeNumber, handler, stats, finalPoints, answers) {
     super();
     this.screenTypeNumber = screenTypeNumber;
