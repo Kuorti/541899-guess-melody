@@ -78,7 +78,9 @@ export default class GenreScreen extends AbstractView {
         }
       });
     });
-    submitButton.addEventListener(`click`, () => {
+    submitButton.addEventListener(`click`, (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       gameAnswers.forEach((innerEl) => {
         this.answers.push(innerEl.firstChild.nextSibling.checked);
       });
@@ -90,6 +92,8 @@ export default class GenreScreen extends AbstractView {
     });
     audioButtons.forEach((el) => {
       el.addEventListener(`click`, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         let audioElement = event.target.nextElementSibling.firstChild.nextSibling;
         if (!audioElement.classList.contains(`already-played`)) {
           this.resetPlayingClasses();

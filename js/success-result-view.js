@@ -23,8 +23,8 @@ export default class SuccessResultView extends AbstractView {
           <h2 class="result__title">Вы настоящий меломан!</h2>
           <p class="result__total">За ${Math.floor((300 - this.stats.timeLeft) / 60)} минут 
             и ${(300 - this.stats.timeLeft) % 60} секунд вы набрали ${this.finalPoints} 
-            баллов (${this.answers.filter((item, index) => item > 0 && item <= 30 && index % 2 !== 0).length} быстрых), 
-            совершив ${3 - this.stats.lives.length} ошибки
+            баллов (${this.answers.filter((item, index) => item <= 30 && index % 2 !== 0).length} быстрых), 
+            совершив ${this.stats.lives.length} ошибки
           </p>
           <p class="result__text">${this.screenTypeNumber[1]}</p>
           <button class="result__replay" type="button">Сыграть ещё раз</button></section>`;
@@ -34,7 +34,9 @@ export default class SuccessResultView extends AbstractView {
   }
   bind() {
     const gameBack = document.querySelector(`.result__replay`);
-    gameBack.addEventListener(`click`, () => {
+    gameBack.addEventListener(`click`, (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       this.onAnswer();
     });
   }

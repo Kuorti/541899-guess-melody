@@ -41,7 +41,7 @@ export default class StatisticsView extends AbstractView {
       </div>
       <div class="game__mistakes">
         ${this.gameData.lives
-      .filter((item) => item !== 0)
+      // .filter((item) => item !== 0)
       .map(() => `<div class="wrong"></div>`)
       .reduce((acc, current) => acc + current, ``)} 
       </div></header>`;
@@ -55,6 +55,7 @@ export default class StatisticsView extends AbstractView {
   bind() {
     const gameBack = document.querySelector(`.game__back`);
     gameBack.addEventListener(`click`, () => {
+      event.preventDefault();
       Application.showWelcome();
     });
   }

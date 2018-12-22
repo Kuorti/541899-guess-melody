@@ -86,7 +86,7 @@ const compareNum = (a, b) => {
 
 const changeLivesPushAnswer = (el, currentQuestion, condition) => {
   if (condition) {
-    gameData.initialState.lives.push(1);
+    gameData.initialState.lives.push(0);
     gameData.answers.push(0, 30);
   } else {
     gameData.answers.push(1, 30);

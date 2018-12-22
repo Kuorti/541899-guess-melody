@@ -55,7 +55,9 @@ export default class GameArtist extends AbstractView {
         this.onAnswer(!condition);
       });
     });
-    audioButton.addEventListener(`click`, () => {
+    audioButton.addEventListener(`click`, (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       if (audioButton.classList.contains(`track__button--pause`)) {
         audioButton.classList.add(`track__button--play`);
         audioButton.classList.remove(`track__button--pause`);

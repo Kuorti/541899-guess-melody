@@ -8,7 +8,7 @@ export default class GameModel {
     };
     this.state = {
       level: 0,
-      lives: [1, 1, 1],
+      lives: [],
       timeLeft: 300,
       cheatMode: 1
     };
@@ -17,7 +17,7 @@ export default class GameModel {
     this.state.level = this.state.level + 1;
   }
   minusLife() {
-    this.state.lives.pop();
+    this.state.lives.push(0);
   }
   minusSec() {
     this.state.timeLeft = this.state.timeLeft - 1;

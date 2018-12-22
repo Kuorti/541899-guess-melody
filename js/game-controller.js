@@ -21,7 +21,7 @@ export default class GameScreen {
   resetData() {
     this.gameModel.state = {
       level: 0,
-      lives: [1, 1, 1],
+      lives: [],
       timeLeft: 300,
       cheatMode: 1
     };
@@ -55,7 +55,7 @@ export default class GameScreen {
     }
   }
   checkGameCondition() {
-    return this.gameModel.getState().lives.length > 0;
+    return this.gameModel.getState().lives.length <= 3;
   }
   checkTimeLeft() {
     return this.gameModel.getState().timeLeft <= 0;

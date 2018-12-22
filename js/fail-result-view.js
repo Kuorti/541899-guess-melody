@@ -22,7 +22,9 @@ export default class GameFail extends AbstractView {
   }
   bind() {
     const submitButton = document.querySelector(`.result__replay`);
-    submitButton.addEventListener(`click`, () => {
+    submitButton.addEventListener(`click`, (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       this.onAnswer();
     });
   }

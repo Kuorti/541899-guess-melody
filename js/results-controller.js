@@ -28,7 +28,7 @@ export default class ResultsScreen {
   }
   createView() {
     let otherPlayersPoints = null;
-    const finalPoints = this.countGamePoints(this.stats.lives, this.answers);
+    const finalPoints = this.countGamePoints(Math.abs(this.stats.lives.length - 3), this.answers);
     StatisticsLoader.loadResults()
       .then((results) => {
         otherPlayersPoints = this.prepareAllPlayersPointsArray(results);
@@ -46,12 +46,13 @@ export default class ResultsScreen {
         const resultTemplate = new ViewClass(screenTypeNumber, handler, this.stats, finalPoints, this.answers);
         resultTemplate.init();
       });
-    StatisticsLoader.sendResults(this.stats);
+    StatisticsLoader.sendResults(this.answers).catch(() => {
+    });
   }
   countGamePoints(triesLeft, answers) {
     let sum = null;
     for (let i = 0; i < answers.length; i++) {
-      if (answers.length < MAX_ANSWERS_ARRAY_LENGTH || triesLeft === 0) {
+      if (answers.length < MAX_ANSWERS_ARRAY_LENGTH || triesLeft < 0) {
         sum = -1;
       } else if (i % 2 === 0 && answers[i] !== 0 && answers[i + 1] <= SLOW_AND_FAST_ANSWERS_EDGE) {
         sum += answers[i] * 2;
@@ -61,7 +62,6 @@ export default class ResultsScreen {
         sum -= 2;
       }
     }
-
     return sum;
   }
   compareNum(a, b) {
@@ -70,7 +70,7 @@ export default class ResultsScreen {
   showResults(otherPlayersPoints, resultStatistics) {
     if (this.stats.timeLeft <= 0) {
       return [0, OUT_OF_TIME_MESSAGE];
-    } else if (this.stats.lives.length <= 0) {
+    } else if (this.stats.lives.length > 3) {
       return [1, OUT_OF_TRIES_MESSAGE];
     } else {
       let newPlayersPoints = otherPlayersPoints.slice();
