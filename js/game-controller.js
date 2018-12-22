@@ -3,7 +3,6 @@ import GameGenre from "./genre-view";
 import GameArtist from "./artist-view";
 import GameStatistics from "./statistics-view";
 import Application from "./router";
-import StatisticsLoader from "./statistics-loader-sender";
 const ONE_SECOND = 1000;
 const LOW_TIME_EDGE = 30;
 

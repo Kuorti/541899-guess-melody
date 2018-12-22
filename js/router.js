@@ -7,12 +7,9 @@ let gameController = null;
 export default class Application {
 
   static start() {
-    // const preloader = new Preloader();
-    // preloader.init();
     StatisticsLoader.loadData()
       .then((data) => (gameController = new GameController(data)))
       .then(() => this.showWelcome());
-    // .then(() => preloader.stop());
   }
 
   static showWelcome() {

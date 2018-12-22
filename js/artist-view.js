@@ -34,8 +34,7 @@ export default class GameArtist extends AbstractView {
             ${currentValue.title}
           </label>
         </div>
-    `)
-      .reduce((acc, current) => acc + current, ``)} 
+    `).reduce((acc, current) => acc + current, ``)} 
     </section>`;
   }
   onAnswer(condition) {
@@ -53,7 +52,6 @@ export default class GameArtist extends AbstractView {
           return element.isCorrect;
         });
         let condition = answersState[el.id.substr(el.id.length - 1)];
-        let answerTime = 30;
         this.onAnswer(!condition);
       });
     });
@@ -69,5 +67,4 @@ export default class GameArtist extends AbstractView {
       }
     });
   }
-
 }
