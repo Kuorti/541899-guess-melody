@@ -55,10 +55,8 @@ export default class StatisticsView extends AbstractView {
   _bind() {
     const gameBack = document.querySelector(`.game__back`);
     gameBack.addEventListener(`click`, () => {
-      if (confirm(`Вы точно хотите начать игру заново?`)) {
-        event.preventDefault();
-        Application.showWelcome();
-      }
+      event.preventDefault();
+      Application.showWelcome();
     });
   }
 }
