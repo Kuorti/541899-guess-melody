@@ -6,8 +6,8 @@ export default class GameFail extends AbstractView {
     this.failText = screenTypeNumber[1];
   }
   init() {
-    this.render();
-    this.bind();
+    this._render();
+    this._bind();
   }
   get template() {
     return `
@@ -17,15 +17,15 @@ export default class GameFail extends AbstractView {
           <button class="result__replay" type="button">Сыграть ещё раз</button>
         </section>`;
   }
-  onAnswer() {
+  _onAnswer() {
     this.handler();
   }
-  bind() {
+  _bind() {
     const submitButton = document.querySelector(`.result__replay`);
     submitButton.addEventListener(`click`, (event) => {
       event.preventDefault();
       event.stopPropagation();
-      this.onAnswer();
+      this._onAnswer();
     });
   }
 }

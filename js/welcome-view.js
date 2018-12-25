@@ -3,11 +3,13 @@ import {gameData} from "./data/game-data";
 import throwDomEl from "./dom-emitter";
 import WelcomeController from "./welcome-controller";
 
-// let asdasd = new WelcomeController();
-
 export default class WelcomeScreen extends AbstractView {
   constructor() {
     super();
+  }
+  init() {
+    this._render();
+    this._bind();
   }
   get template() {
     return `
@@ -25,17 +27,17 @@ export default class WelcomeScreen extends AbstractView {
         <p class="welcome__text">Удачи!</p>
       </section>`;
   }
-  render() {
+  _render() {
     throwDomEl(this.template);
   }
-  onAnswer() {
+  _onAnswer() {
     let welcomeController = new WelcomeController();
     welcomeController.handleAnswer();
     gameData.initialState.screenType = 1;
   }
-  bind() {
+  _bind() {
     document.querySelector(`.welcome__button`).addEventListener(`click`, () => {
-      this.onAnswer();
+      this._onAnswer();
     });
   }
 }

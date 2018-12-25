@@ -10,10 +10,10 @@ export default class GameArtist extends AbstractView {
     this.questionNumber = this.gameState.level;
   }
   init() {
-    this.render();
-    this.bind();
+    this._render();
+    this._bind();
   }
-  render() {
+  _render() {
     return throwDomEl(this.template);
   }
   get template() {
@@ -37,11 +37,11 @@ export default class GameArtist extends AbstractView {
     `).reduce((acc, current) => acc + current, ``)} 
     </section>`;
   }
-  onAnswer(condition) {
+  _onAnswer(condition) {
     this.handler(condition);
   }
 
-  bind() {
+  _bind() {
     const submitButtons = document.querySelectorAll(`.artist input`);
     const audioButton = document.querySelector(`.track__button`);
     const audioElement = document.querySelector(`.game__track audio`);
@@ -52,7 +52,7 @@ export default class GameArtist extends AbstractView {
           return element.isCorrect;
         });
         let condition = answersState[el.id.substr(el.id.length - 1)];
-        this.onAnswer(!condition);
+        this._onAnswer(!condition);
       });
     });
     audioButton.addEventListener(`click`, (event) => {

@@ -1,5 +1,5 @@
 const STATISTICS_SERVER_URL = `https://es.dump.academy/guess-melody`;
-const APP_ID = `548834`;
+const APP_ID = `588830`;
 const EMPTY_RESULTS = [];
 
 export default class Loader {

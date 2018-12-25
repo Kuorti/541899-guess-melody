@@ -12,10 +12,10 @@ export default class StatisticsView extends AbstractView {
     this.init();
   }
   init() {
-    this.render();
-    this.bind();
+    this._render();
+    this._bind();
   }
-  render() {
+  _render() {
     return throwDomEl(this.template, true);
   }
   get template() {
@@ -52,11 +52,13 @@ export default class StatisticsView extends AbstractView {
       timer.classList.add(`timer__value--finished`);
     }
   }
-  bind() {
+  _bind() {
     const gameBack = document.querySelector(`.game__back`);
     gameBack.addEventListener(`click`, () => {
-      event.preventDefault();
-      Application.showWelcome();
+      if (confirm(`Вы точно хотите начать игру заново?`)) {
+        event.preventDefault();
+        Application.showWelcome();
+      }
     });
   }
 }

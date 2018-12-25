@@ -8,10 +8,10 @@ export default class AbstractView {
   get template() {
     throw new Error(`Template is required`);
   }
-  render(dontClear, append) {
+  _render(dontClear, append) {
     return utils.throwDomEl(this.template, dontClear, append);
   }
-  bind() {
+  _bind() {
     // bind handlers if required
   }
 }

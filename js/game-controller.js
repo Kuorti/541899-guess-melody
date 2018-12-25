@@ -15,8 +15,8 @@ export default class GameScreen {
     this.answerStartTime = null;
   }
   init() {
-    this.createGameView();
-    this.createStatisticsView();
+    this._createGameView();
+    this._createStatisticsView();
   }
   resetData() {
     this.gameModel.state = {
@@ -27,40 +27,40 @@ export default class GameScreen {
     };
     this.gameModel.answers = [];
   }
-  createStatisticsView() {
+  _createStatisticsView() {
     this.gameStatisticsView.init();
   }
-  createGameView() {
-    this.startTimer();
+  _createGameView() {
+    this._startTimer();
     const question = this.gameModel.getQuestions()[this.gameModel.getState().level];
     const ViewClass = question.type === `genre` ? GameGenre : GameArtist;
-    const handler = (condition) => this.handleAnswer(condition);
+    const handler = (condition) => this._handleAnswer(condition);
     const gameTemplate = new ViewClass(question, this.gameModel.getQuestions(), this.gameModel.getState(), handler);
     gameTemplate.init();
     this.answerStartTime = this.gameModel.getState().timeLeft;
   }
-  handleAnswer(condition) {
+  _handleAnswer(condition) {
     this.stopTimer();
     if (condition) {
       this.gameModel.minusLife();
     }
     let answerTime = Math.abs(this.gameModel.getState().timeLeft - this.answerStartTime);
     this.gameModel.answers.push(+!condition, answerTime);
-    if (this.checkGameCondition() && (this.gameModel.getState().level < this.gameModel.getQuestions().length - 1)) {
+    if (this._checkGameCondition() && (this.gameModel.getState().level < this.gameModel.getQuestions().length - 1)) {
       this.gameModel.nextLevel();
-      this.createGameView();
+      this._createGameView();
       this.gameStatisticsView.updateView(this.gameModel.getState());
     } else {
       Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
     }
   }
-  checkGameCondition() {
+  _checkGameCondition() {
     return this.gameModel.getState().lives.length <= 3;
   }
-  checkTimeLeft() {
+  _checkTimeLeft() {
     return this.gameModel.getState().timeLeft <= 0;
   }
-  tick() {
+  _tick() {
     this.timer = setTimeout(() => {
       let timeLeft = this.gameModel.getState().timeLeft;
       this.gameModel.minusSec();
@@ -68,16 +68,16 @@ export default class GameScreen {
       if (timeLeft < LOW_TIME_EDGE) {
         this.gameStatisticsView.createlowTimeEffect();
       }
-      this.tick();
+      this._tick();
     }, ONE_SECOND);
-    if (this.checkTimeLeft()) {
+    if (this._checkTimeLeft()) {
       this.stopTimer();
       Application.showStats(this.gameModel.getState(), this.gameModel.getAnswers());
     }
   }
-  startTimer() {
+  _startTimer() {
     this.gameStatisticsView.updateView(this.gameModel.getState());
-    this.tick();
+    this._tick();
   }
   stopTimer() {
     clearTimeout(this.timer);

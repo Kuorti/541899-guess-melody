@@ -12,10 +12,10 @@ export default class GenreScreen extends AbstractView {
     this.answers = [];
   }
   init() {
-    this.render();
-    this.bind();
+    this._render();
+    this._bind();
   }
-  render() {
+  _render() {
     throwDomEl(this.template);
   }
   get template() {
@@ -38,15 +38,15 @@ export default class GenreScreen extends AbstractView {
           </form>
      </section>`;
   }
-  onAnswer(condition) {
+  _onAnswer(condition) {
     this.handler(condition);
   }
-  prepareRightAnswers() {
+  _prepareRightAnswers() {
     let answersOptions = [];
     this.allQuestions[this.questionNumber].answers.forEach((el) => answersOptions.push(el.genre));
     return answersOptions;
   }
-  resetPlayingClasses() {
+  _resetPlayingClasses() {
     document.querySelectorAll(`.track button`).forEach((elem) => {
       if (elem.classList.contains(`track__button--pause`)) {
         elem.classList.remove(`track__button--pause`);
@@ -56,7 +56,7 @@ export default class GenreScreen extends AbstractView {
       }
     });
   }
-  stopAllAudio() {
+  _stopAllAudio() {
     document.querySelectorAll(`.track__status audio`).forEach((el) => {
       if (el.classList.contains(`already-played`)) {
         el.classList.remove(`already-played`);
@@ -64,7 +64,7 @@ export default class GenreScreen extends AbstractView {
       el.pause();
     });
   }
-  bind() {
+  _bind() {
     const submitButton = document.querySelector(`.game__submit`);
     const gameAnswers = document.querySelectorAll(`.game__answer`);
     const audioButtons = document.querySelectorAll(`.track__button`);
@@ -84,11 +84,11 @@ export default class GenreScreen extends AbstractView {
       gameAnswers.forEach((innerEl) => {
         this.answers.push(innerEl.firstChild.nextSibling.checked);
       });
-      const rightAnswers = this.prepareRightAnswers().map((el) => {
+      const rightAnswers = this._prepareRightAnswers().map((el) => {
         return el === this.allQuestions[this.questionNumber].genre;
       });
       let condition = (JSON.stringify(this.answers) !== JSON.stringify(rightAnswers));
-      this.onAnswer(condition);
+      this._onAnswer(condition);
     });
     audioButtons.forEach((el) => {
       el.addEventListener(`click`, (event) => {
@@ -96,8 +96,8 @@ export default class GenreScreen extends AbstractView {
         event.stopPropagation();
         let audioElement = event.target.nextElementSibling.firstChild.nextSibling;
         if (!audioElement.classList.contains(`already-played`)) {
-          this.resetPlayingClasses();
-          this.stopAllAudio();
+          this._resetPlayingClasses();
+          this._stopAllAudio();
           audioElement.classList.add(`already-played`);
           el.classList.add(`track__button--pause`);
           audioElement.play();

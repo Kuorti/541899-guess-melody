@@ -14,34 +14,31 @@ export default class ResultsScreen {
     this.answers = answers;
   }
   init() {
-    this.createView();
+    this._createView();
   }
-  handleAnswer() {
-    Application.showWelcome();
-  }
-  prepareAllPlayersPointsArray(otherPlayersStatistics) {
+  _prepareAllPlayersPointsArray(otherPlayersStatistics) {
     let resultPoints = [];
     otherPlayersStatistics.forEach((element) => {
-      resultPoints.push(this.countGamePoints(3, element));
+      resultPoints.push(this._countGamePoints(3, element));
     });
     return resultPoints;
   }
-  createView() {
+  _createView() {
     let otherPlayersPoints = null;
-    const finalPoints = this.countGamePoints(Math.abs(this.stats.lives.length - 3), this.answers);
+    const finalPoints = this._countGamePoints(Math.abs(this.stats.lives.length - 3), this.answers);
     StatisticsLoader.loadResults()
       .then((results) => {
-        otherPlayersPoints = this.prepareAllPlayersPointsArray(results);
-        const screenTypeNumber = this.showResults(otherPlayersPoints, finalPoints);
-        const handler = this.handleAnswer;
+        otherPlayersPoints = this._prepareAllPlayersPointsArray(results);
+        const screenTypeNumber = this._showResults(otherPlayersPoints, finalPoints);
+        const handler = this._handleAnswer;
         let ViewClass = screenTypeNumber[0] === 0 || screenTypeNumber[0] === 1 ? FailView : SuccessView;
         const resultTemplate = new ViewClass(screenTypeNumber, handler, this.stats, finalPoints, this.answers);
         resultTemplate.init();
       })
       .catch(() => {
         otherPlayersPoints = [];
-        const screenTypeNumber = this.showResults(otherPlayersPoints, finalPoints);
-        const handler = this.handleAnswer;
+        const screenTypeNumber = this._showResults(otherPlayersPoints, finalPoints);
+        const handler = this._handleAnswer;
         let ViewClass = screenTypeNumber[0] === 0 || screenTypeNumber[0] === 1 ? FailView : SuccessView;
         const resultTemplate = new ViewClass(screenTypeNumber, handler, this.stats, finalPoints, this.answers);
         resultTemplate.init();
@@ -49,25 +46,26 @@ export default class ResultsScreen {
     StatisticsLoader.sendResults(this.answers).catch(() => {
     });
   }
-  countGamePoints(triesLeft, answers) {
+  _countGamePoints(triesLeft, answersValuesTime) {
     let sum = null;
-    for (let i = 0; i < answers.length; i++) {
-      if (answers.length < MAX_ANSWERS_ARRAY_LENGTH || triesLeft < 0) {
+    for (let [i, value] of answersValuesTime.entries()) {
+      if (answersValuesTime.length < MAX_ANSWERS_ARRAY_LENGTH || triesLeft === 0) {
         sum = -1;
-      } else if (i % 2 === 0 && answers[i] !== 0 && answers[i + 1] <= SLOW_AND_FAST_ANSWERS_EDGE) {
-        sum += answers[i] * 2;
-      } else if (i % 2 === 0 && answers[i] !== 0 && answers[i + 1] > SLOW_AND_FAST_ANSWERS_EDGE) {
-        sum += answers[i];
-      } else if (i % 2 === 0 && answers[i] === 0) {
+      } else if (i % 2 === 0 && value !== 0 && answersValuesTime[i + 1] <= SLOW_AND_FAST_ANSWERS_EDGE) {
+        sum += value * 2;
+      } else if (i % 2 === 0 && value !== 0 && answersValuesTime[i + 1] > SLOW_AND_FAST_ANSWERS_EDGE) {
+        sum += value;
+      } else if (i % 2 === 0 && value === 0) {
         sum -= 2;
       }
     }
+
     return sum;
   }
-  compareNum(a, b) {
+  _compareNum(a, b) {
     return a - b;
   }
-  showResults(otherPlayersPoints, resultStatistics) {
+  _showResults(otherPlayersPoints, resultStatistics) {
     if (this.stats.timeLeft <= 0) {
       return [0, OUT_OF_TIME_MESSAGE];
     } else if (this.stats.lives.length > 3) {
@@ -75,7 +73,7 @@ export default class ResultsScreen {
     } else {
       let newPlayersPoints = otherPlayersPoints.slice();
       newPlayersPoints.push(resultStatistics);
-      newPlayersPoints.sort(this.compareNum).reverse();
+      newPlayersPoints.sort(this._compareNum).reverse();
       const playerPointsPosition = newPlayersPoints.indexOf(resultStatistics) + 1;
       const playersQuantity = newPlayersPoints.length;
       let statisticsPosition = (playersQuantity - playerPointsPosition) / playersQuantity * 100;
@@ -83,7 +81,7 @@ export default class ResultsScreen {
       return [2, successMessage];
     }
   }
-  handleAnswer() {
+  _handleAnswer() {
     Application.showWelcome();
   }
 }

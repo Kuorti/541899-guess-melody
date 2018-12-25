@@ -6,13 +6,9 @@ const WelcomePage = new WelcomeView();
 export default class WelcomeScreen {
   constructor() {}
   init() {
-    this.createView();
+    WelcomePage.init();
   }
   handleAnswer() {
     Application.showGame();
-  }
-  createView() {
-    WelcomePage.render();
-    WelcomePage.bind();
   }
 }

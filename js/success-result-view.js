@@ -11,10 +11,10 @@ export default class SuccessResultView extends AbstractView {
     this.handler = handler;
   }
   init() {
-    this.render();
-    this.bind();
+    this._render();
+    this._bind();
   }
-  render() {
+  _render() {
     return throwDomEl(this.template);
   }
   get template() {
@@ -29,15 +29,15 @@ export default class SuccessResultView extends AbstractView {
           <p class="result__text">${this.screenTypeNumber[1]}</p>
           <button class="result__replay" type="button">Сыграть ещё раз</button></section>`;
   }
-  onAnswer() {
+  _onAnswer() {
     this.handler();
   }
-  bind() {
+  _bind() {
     const gameBack = document.querySelector(`.result__replay`);
     gameBack.addEventListener(`click`, (event) => {
       event.preventDefault();
       event.stopPropagation();
-      this.onAnswer();
+      this._onAnswer();
     });
   }
 }
