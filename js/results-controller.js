@@ -48,7 +48,7 @@ export default class ResultsScreen {
   }
   _countGamePoints(triesLeft, answersValuesTime) {
     let sum = null;
-    for (let [i, value] of answersValuesTime) {
+    for (let [i, value] of answersValuesTime.entries()) {
       if (answersValuesTime.length < MAX_ANSWERS_ARRAY_LENGTH || triesLeft === 0) {
         sum = -1;
       } else if (i % 2 === 0 && value !== 0 && answersValuesTime[i + 1] <= SLOW_AND_FAST_ANSWERS_EDGE) {
