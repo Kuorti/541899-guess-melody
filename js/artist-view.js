@@ -48,10 +48,10 @@ export default class GameArtist extends AbstractView {
 
     submitButtons.forEach((el) => {
       el.addEventListener(`click`, () => {
-        let answersState = this.allQuestions[this.questionNumber].answers.map((element) => {
+        const answersState = this.allQuestions[this.questionNumber].answers.map((element) => {
           return element.isCorrect;
         });
-        let condition = answersState[el.id.substr(el.id.length - 1)];
+        const condition = answersState[el.id.substr(el.id.length - 1)];
         this._onAnswer(!condition);
       });
     });

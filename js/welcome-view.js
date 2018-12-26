@@ -31,7 +31,7 @@ export default class WelcomeScreen extends AbstractView {
     throwDomEl(this.template);
   }
   _onAnswer() {
-    let welcomeController = new WelcomeController();
+    const welcomeController = new WelcomeController();
     welcomeController.handleAnswer();
     gameData.initialState.screenType = 1;
   }

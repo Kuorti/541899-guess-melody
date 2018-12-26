@@ -42,7 +42,7 @@ export default class GenreScreen extends AbstractView {
     this.handler(condition);
   }
   _prepareRightAnswers() {
-    let answersOptions = [];
+    const answersOptions = [];
     this.allQuestions[this.questionNumber].answers.forEach((el) => answersOptions.push(el.genre));
     return answersOptions;
   }
@@ -87,14 +87,14 @@ export default class GenreScreen extends AbstractView {
       const rightAnswers = this._prepareRightAnswers().map((el) => {
         return el === this.allQuestions[this.questionNumber].genre;
       });
-      let condition = (JSON.stringify(this.answers) !== JSON.stringify(rightAnswers));
+      const condition = (JSON.stringify(this.answers) !== JSON.stringify(rightAnswers));
       this._onAnswer(condition);
     });
     audioButtons.forEach((el) => {
       el.addEventListener(`click`, (event) => {
         event.preventDefault();
         event.stopPropagation();
-        let audioElement = event.target.nextElementSibling.firstChild.nextSibling;
+        const audioElement = event.target.nextElementSibling.firstChild.nextSibling;
         if (!audioElement.classList.contains(`already-played`)) {
           this._resetPlayingClasses();
           this._stopAllAudio();

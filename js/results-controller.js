@@ -17,7 +17,7 @@ export default class ResultsScreen {
     this._createView();
   }
   _prepareAllPlayersPointsArray(otherPlayersStatistics) {
-    let resultPoints = [];
+    const resultPoints = [];
     otherPlayersStatistics.forEach((element) => {
       resultPoints.push(this._countGamePoints(3, element));
     });
@@ -71,12 +71,12 @@ export default class ResultsScreen {
     } else if (this.stats.lives.length > 3) {
       return [1, OUT_OF_TRIES_MESSAGE];
     } else {
-      let newPlayersPoints = otherPlayersPoints.slice();
+      const newPlayersPoints = otherPlayersPoints.slice();
       newPlayersPoints.push(resultStatistics);
       newPlayersPoints.sort(this._compareNum).reverse();
       const playerPointsPosition = newPlayersPoints.indexOf(resultStatistics) + 1;
       const playersQuantity = newPlayersPoints.length;
-      let statisticsPosition = (playersQuantity - playerPointsPosition) / playersQuantity * 100;
+      const statisticsPosition = (playersQuantity - playerPointsPosition) / playersQuantity * 100;
       const successMessage = `Вы заняли ${playerPointsPosition} место из ${playersQuantity} игроков. Это лучше, чем у ${Math.round(statisticsPosition)}% игроков`;
       return [2, successMessage];
     }

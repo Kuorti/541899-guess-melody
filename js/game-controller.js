@@ -44,7 +44,7 @@ export default class GameScreen {
     if (condition) {
       this.gameModel.minusLife();
     }
-    let answerTime = Math.abs(this.gameModel.getState().timeLeft - this.answerStartTime);
+    const answerTime = Math.abs(this.gameModel.getState().timeLeft - this.answerStartTime);
     this.gameModel.answers.push(+!condition, answerTime);
     if (this._checkGameCondition() && (this.gameModel.getState().level < this.gameModel.getQuestions().length - 1)) {
       this.gameModel.nextLevel();
@@ -62,7 +62,7 @@ export default class GameScreen {
   }
   _tick() {
     this.timer = setTimeout(() => {
-      let timeLeft = this.gameModel.getState().timeLeft;
+      const timeLeft = this.gameModel.getState().timeLeft;
       this.gameModel.minusSec();
       this.gameStatisticsView.updateView(this.gameModel.getState());
       if (timeLeft < LOW_TIME_EDGE) {
